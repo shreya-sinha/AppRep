@@ -22,7 +22,6 @@ public class PlayActivity extends FragmentActivity implements
 	private final String WORD_FRAGMENT = "wordFragment";
 	private final String LETTERS_FRAGMENT = "lettersFragment";
 	private final String HANGMAN_FRAGMENT = "hangmanFragment";
-	
 
 	/**
 	 * creates a linear layout and adds the two fragments- WordFragment and
@@ -158,7 +157,8 @@ public class PlayActivity extends FragmentActivity implements
 			transaction.addToBackStack(null);
 			
 			// Commit the transaction
-			transaction.commit();
+			int success=transaction.commit();
+            Log.d("PlayActivity","Transaction success" + success);
 			
 			
 		}

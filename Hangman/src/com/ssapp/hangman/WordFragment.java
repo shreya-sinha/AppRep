@@ -220,6 +220,10 @@ public class WordFragment extends Fragment {
 	private String getWord() {
 		return this.word;
 	}
-	
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d("WordFragment", "OnDestroy");
+    }
 }

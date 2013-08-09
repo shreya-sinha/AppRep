@@ -45,9 +45,13 @@ public class HangmanFragment extends Fragment {
 		Log.d("HangmanFragment", "---------> onCreate");
 
 		if (savedInstanceState == null) {
-			this.setState(1);
+            Log.d("HangmanFragment", "savedInstanceState == null");
+
+            this.setState(1);
 		} else {
-			this.setState(savedInstanceState.getInt(STATE));
+            Log.d("HangmanFragment", "savedInstanceState != null");
+
+            this.setState(savedInstanceState.getInt(STATE));
 		}
 	}
 
@@ -98,4 +102,9 @@ public class HangmanFragment extends Fragment {
 		
 		return this.state;
 	}
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d("HangmanFragment", "OnDestroy");
+    }
 }

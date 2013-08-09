@@ -75,7 +75,7 @@ public class DBHelper extends SQLiteOpenHelper {
 		c.moveToPosition(randomValue);  
 		
 		result=c.getString(iName);
-		c.close();
+		
 		
 		return result;
 	}
