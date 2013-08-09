@@ -46,7 +46,7 @@ public class PlayActivity extends FragmentActivity implements
 			FragmentTransaction fragTransaction = getSupportFragmentManager()
 					.beginTransaction();
 			fragTransaction.add(R.id.playscreen, wordFragment, WORD_FRAGMENT);
-			//fragTransaction.addToBackStack(null);
+			fragTransaction.addToBackStack(null);
 			fragTransaction.commit();
 
 			LettersFragment lettersFragment = new LettersFragment();
@@ -54,7 +54,7 @@ public class PlayActivity extends FragmentActivity implements
 					.beginTransaction();
 			fragTransaction1.add(R.id.playscreen, lettersFragment,
 					LETTERS_FRAGMENT);
-			//fragTransaction1.addToBackStack(null);
+			fragTransaction1.addToBackStack(null);
 			fragTransaction1.commit();
 		}
 	}
@@ -152,14 +152,14 @@ public class PlayActivity extends FragmentActivity implements
 
 			// Replace whatever is in the playscreen view with this fragment,
 			// and add the transaction to the back stack so the user can navigate back
-			transaction.add(R.id.playscreen, newFragment);
+			transaction.replace(R.id.playscreen, newFragment);
 			// TODO create fragment
 			//transaction.show(newFragment);
-			transaction.addToBackStack(null);
+			transaction.addToBackStack("");
 			
 			// Commit the transaction
-			transaction.commit();
-			
+			int id=transaction.commit();
+			Log.d("PlayActivity", "transaction returns value "+id);
 			
 		}
 	}
