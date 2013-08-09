@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:orientation="vertical"
+    android:weightSum="30" >
+
+    <LinearLayout
+        android:layout_height="0dip"
+        android:layout_width="match_parent"
+        android:layout_weight="10"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/a"
+            style="@style/LetterButton"
+            android:text="@string/A" />
+
+        <Button
+            android:id="@+id/b"
+            style="@style/LetterButton"
+            android:text="@string/B" />
+
+        <Button
+            android:id="@+id/c"
+            style="@style/LetterButton"
+            android:text="@string/C" />
+
+        <Button
+            android:id="@+id/d"
+            style="@style/LetterButton"
+            android:text="@string/D" />
+
+        <Button
+            android:id="@+id/e"
+            style="@style/LetterButton"
+            android:text="@string/E" />
+
+        <Button
+            android:id="@+id/f"
+            style="@style/LetterButton"
+            android:text="@string/F" />
+
+        <Button
+            android:id="@+id/g"
+            style="@style/LetterButton"
+            android:text="@string/G" />
+
+        <Button
+            android:id="@+id/h"
+            style="@style/LetterButton"
+            android:text="@string/H" />
+
+        <Button
+            android:id="@+id/i"
+            style="@style/LetterButton"
+            android:text="@string/I" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_height="0dip"
+        android:layout_width="match_parent"
+        android:layout_weight="10"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/j"
+           style="@style/LetterButton"
+            android:text="@string/J" />
+
+        <Button
+            android:id="@+id/k"
+            style="@style/LetterButton"
+            android:text="@string/K" />
+
+        <Button
+            android:id="@+id/l"
+            style="@style/LetterButton"
+            android:text="@string/L" />
+
+        <Button
+            android:id="@+id/m"
+            style="@style/LetterButton"
+            android:text="@string/M" />
+
+        <Button
+            android:id="@+id/n"
+            style="@style/LetterButton"
+            android:text="@string/N" />
+
+        <Button
+            android:id="@+id/o"
+            style="@style/LetterButton"
+            android:text="@string/O" />
+
+        <Button
+            android:id="@+id/p"
+            style="@style/LetterButton"
+            android:text="@string/P" />
+
+        <Button
+            android:id="@+id/q"
+           style="@style/LetterButton"
+            android:text="@string/Q" />
+
+        <Button
+            android:id="@+id/r"
+            style="@style/LetterButton"
+            android:text="@string/R" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_height="0dip"
+        android:layout_width="match_parent"
+        android:layout_weight="10"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/s"
+            style="@style/LetterButton"
+            android:text="@string/S" />
+
+        <Button
+            android:id="@+id/t"
+           style="@style/LetterButton"
+            android:text="@string/T" />
+
+        <Button
+            android:id="@+id/u"
+            style="@style/LetterButton"
+            android:text="@string/U" />
+
+        <Button
+            android:id="@+id/v"
+            style="@style/LetterButton"
+            android:text="@string/V" />
+
+        <Button
+            android:id="@+id/w"
+            style="@style/LetterButton"
+            android:text="@string/W" />
+
+        <Button
+            android:id="@+id/x"
+            style="@style/LetterButton"
+            android:text="@string/X" />
+
+        <Button
+            android:id="@+id/y"
+            style="@style/LetterButton"
+            android:text="@string/Y" />
+
+        <Button
+            android:id="@+id/z"
+            style="@style/LetterButton"
+            android:text="@string/Z" />
+    </LinearLayout>
+
+</LinearLayout>
