@@ -11,25 +11,32 @@ import android.widget.LinearLayout;
 
 /**
  * 
- * @author shreya
+ * @author shreya 
+ * The HangmanFragment displays the 
+ * hangman graphic image which depicts the no. of turns played
  * 
  */
 public class HangmanFragment extends Fragment {
+	
+	private static final String TAG="HangmanFragment"; 
 
-	private int state;
 	public final static String STATE = "hangman_state";
 
 	Hangman h;
 	DrawHangman drawHangmanObj;
 
+	// Interface to plot the hangman image
 	public interface DrawHangman {
 		public void drawHangman();
 	}
 
+	/**
+	 * Ensures that the parent activity implements the DrawHangman interface 
+	 */
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		Log.d("HangmanFragment", "---------> onAttach");
+		Log.d(TAG, "--------- onAttach ---------");
 
 		try {
 			drawHangmanObj = (DrawHangman) activity;
@@ -39,30 +46,60 @@ public class HangmanFragment extends Fragment {
 		}
 	}
 
+	int imgResId;
+	/**
+	 * Check state and assign which image is to be displayed
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.d("HangmanFragment", "---------> onCreate");
-
-		if (savedInstanceState == null) {
-			this.setState(1);
-		} else {
-			this.setState(savedInstanceState.getInt(STATE));
+		Log.d(TAG, "--------- onCreate ---------");
+		switch(PlayActivity.getState()){
+		case 1:
+			imgResId=R.layout.hangman_fragment;
+			break;
+		case 2:
+			imgResId=R.layout.hangman_fragment;
+			break;
+		case 3:
+			imgResId=R.layout.hangman_fragment;
+			break;
+		case 4:
+			imgResId=R.layout.hangman_fragment;
+			break;
+		case 5:
+			imgResId=R.layout.hangman_fragment;
+			break;
+		case 6:
+			imgResId=R.layout.hangman_fragment;
+			break;
+		case 7:
+			imgResId=R.layout.hangman_fragment;
+			break;
+		case 8:
+			imgResId=R.layout.hangman_fragment;
+			break;
+		case 9:
+			imgResId=R.layout.hangman_fragment;
+			break;
+		default:
+			Log.d(TAG,"Invalid game state encountered. Cannot draw hangman");
 		}
+		
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		Log.d("HangmanFragment", "---------> onCreateView");
-		return inflater.inflate(R.layout.hangman_fragment, container, false);
+		Log.d(TAG, "--------- onCreateView ---------");
+		return inflater.inflate(imgResId, container, false);
 	}
 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		Log.d("HangmanFragment", "---------> onViewCreated");
+		Log.d(TAG, "--------- onViewCreated ---------");
 
 		LinearLayout hangmanFragLayout = (LinearLayout) getView().findViewById(
 				R.id.hangman_fragment);
@@ -72,30 +109,8 @@ public class HangmanFragment extends Fragment {
 	}
 
 	@Override
-	public void onStart() {
-		super.onStart();
-		Log.d("HangmanFragment", "---------> onStart");
-
-		Log.d("HangmanFragment", "State = " + this.state);
-	}
-
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-		Log.d("HangmanFragment", "---------> onSaveInstanceState");
-
-		outState.putInt(STATE, this.getState());
-	}
-
-	public void setState(int state) {
-		Log.d("HangmanFragment", "setState");
-		this.state = state;
-
-	}
-
-	public int getState() {
-		Log.d("HangmanFragment", "getState");
-		
-		return this.state;
-	}
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "--------- OnDestroy ---------");
+    }
 }

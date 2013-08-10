@@ -1,5 +1,6 @@
 package com.ssapp.hangman;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -19,10 +20,20 @@ import com.ssapp.hangman.LettersFragment.OnLetterSelectedListener;
  */
 public class PlayActivity extends FragmentActivity implements
 		OnLetterSelectedListener, DrawHangman {
+	private static final String TAG = "PlayActivity";
 	private final String WORD_FRAGMENT = "wordFragment";
 	private final String LETTERS_FRAGMENT = "lettersFragment";
 	private final String HANGMAN_FRAGMENT = "hangmanFragment";
-	
+	private static int state;
+
+	public static int getState() {
+		return state;
+	}
+
+	public static void setState(int state) {
+		PlayActivity.state = state;
+		Log.d(TAG, "game state changed to " + state);
+	}
 
 	/**
 	 * creates a linear layout and adds the two fragments- WordFragment and
@@ -46,7 +57,7 @@ public class PlayActivity extends FragmentActivity implements
 			FragmentTransaction fragTransaction = getSupportFragmentManager()
 					.beginTransaction();
 			fragTransaction.add(R.id.playscreen, wordFragment, WORD_FRAGMENT);
-			fragTransaction.addToBackStack(null);
+			// fragTransaction.addToBackStack(null);
 			fragTransaction.commit();
 
 			LettersFragment lettersFragment = new LettersFragment();
@@ -54,7 +65,7 @@ public class PlayActivity extends FragmentActivity implements
 					.beginTransaction();
 			fragTransaction1.add(R.id.playscreen, lettersFragment,
 					LETTERS_FRAGMENT);
-			fragTransaction1.addToBackStack(null);
+			// fragTransaction1.addToBackStack(null);
 			fragTransaction1.commit();
 		}
 	}
@@ -102,17 +113,52 @@ public class PlayActivity extends FragmentActivity implements
 				.findFragmentByTag(WORD_FRAGMENT);
 
 		if (wordFragment != null) {
-			// If wordFragment is available, i.e., in two-pane layout...
-			// Call a method in the WordFragment to update its content
-			// returns true if word is updated (correct response)
-			boolean wordUpdated = wordFragment.updateWordView(id);
+			/*
+			 * If wordFragment is available, i.e., in two-pane layout... Call a
+			 * method in the WordFragment to update its content
+			 */
 
-			// call method to draw hangman in case of incorrect response
-			Log.d("PlayActivity", "wordUpdated "+wordUpdated);
-			if (!wordUpdated) {
+			int nextActionSwitch = wordFragment.updateWordView(id);
 
+			Log.d(TAG, "nextActionSwitch " + nextActionSwitch);
+
+			switch (nextActionSwitch) {
+			case 0:
+				break;
+			case 1:
 				drawHangman();
+				break;
+			case 2:
+				setContentView(R.layout.activity_main);
+				//setting up a splash screen
+		        Thread splashGameOver=new Thread(){
+		        	public void run(){
+		        		try{
+		        			int splashGameOver=0;
+		        			while(splashGameOver<2000){
+		        				sleep(100);
+		        				splashGameOver+=100;
+		        				
+		        			}
+		        			//starting the menu screen activity after splash timer ends 
+		        			startActivity(new Intent("com.ssapp.hangman.SCORESACTIVITY"));
+		        			
+		        		}catch(InterruptedException ex){
+		        			ex.printStackTrace();
+		        		}finally{
+		        			finish();
+		        		}
+		        	}
+		        };
+		        splashGameOver.start();
+				break;
+			case 3:
+				
+				break;
+			default:
+				Log.d(TAG, "Invalid value in nextActionSwitch");
 			}
+
 		} else {
 			// if wordFragment is not available
 
@@ -126,41 +172,32 @@ public class PlayActivity extends FragmentActivity implements
 	 */
 	@Override
 	public void drawHangman() {
-		Log.d("PlayActivity", "Inside drawFragment()");
-		
+		Log.d(TAG, "Inside drawFragment()");
+
 		// find hangmanFragment
 		HangmanFragment hangmanFragment = (HangmanFragment) getSupportFragmentManager()
 				.findFragmentByTag(HANGMAN_FRAGMENT);
 		if (hangmanFragment != null) {
-			Log.d("PlayActivity", "hangmanFragment ="+hangmanFragment);
+			Log.d(TAG, "hangmanFragment =" + hangmanFragment);
 		} else {
 
-			// If hangmanFragment is not available,
-			// must swap fragments
-
-			// Create fragment and give it the previous state of hangman + 1
 			HangmanFragment newFragment = new HangmanFragment();
 			Bundle args = new Bundle();
-			int state = newFragment.getState();
-			state+=1;
-			Log.d("PlayActivity", "state"+ state);
-			args.putInt(HangmanFragment.STATE, state);
+			Log.d(TAG, "Creating new HangmanFragment");
+			args.putInt(HangmanFragment.STATE, PlayActivity.getState());
 			newFragment.setArguments(args);
-			
 			FragmentTransaction transaction = getSupportFragmentManager()
 					.beginTransaction();
-
-			// Replace whatever is in the playscreen view with this fragment,
-			// and add the transaction to the back stack so the user can navigate back
-			transaction.replace(R.id.playscreen, newFragment);
+			transaction.add(R.id.playscreen, newFragment);
 			// TODO create fragment
-			//transaction.show(newFragment);
-			transaction.addToBackStack("");
-			
+			// transaction.show(newFragment);
+			transaction.addToBackStack(null);
+
 			// Commit the transaction
-			int id=transaction.commit();
-			Log.d("PlayActivity", "transaction returns value "+id);
-			
+
+			int success = transaction.commit();
+			Log.d(TAG, "Transaction success" + success);
+
 		}
 	}
 }

@@ -11,47 +11,47 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 /**
  * 
- * @author shreya
- *
+ * @author shreya Displays the blanks for the word that the user needs to guess
+ *         and handles all modifications to it.
+ * 
  */
 public class WordFragment extends Fragment {
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		// TODO Auto-generated method stub
-		super.onSaveInstanceState(outState);
-		
-	}
 
-	@Override
-	public void onStop() {
-		// TODO Auto-generated method stub
-		super.onStop();
-	}
+	private static final String TAG = "WordFragment";
 
 	private String word;
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		return inflater.inflate(R.layout.word_fragment, container, false);
+	private void setWord(String word) {
+		this.word = word;
+
 	}
 
+	private String getWord() {
+		return this.word;
+	}
+
+	/**
+	 * Initialize a game turn by fetching a word from the database
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
+
 		super.onCreate(savedInstanceState);
-		if(savedInstanceState!=null){
+		if (savedInstanceState != null) {
 			return;
-		}else{
+		} else {
 			DBHelper info = new DBHelper(getActivity());
 
 			DBHelper.setDatabase(info.getWritableDatabase());
 			setWord(info.getData());
+			PlayActivity.setState(0);
 			info.close();
+			Log.d(TAG, "Initialised word from database");
 
+			// TODO temporary dialog - only for dubugging , to be removed
 			Dialog d = new Dialog(getActivity());
 			d.setTitle("Display Word");
 			TextView tv = new TextView(getActivity());
@@ -61,12 +61,25 @@ public class WordFragment extends Fragment {
 		}
 	}
 
+	/**
+	 * inflates the word fragment
+	 */
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		return inflater.inflate(R.layout.word_fragment, container, false);
+	}
+
+	/**
+	 * Creates the linear layout in word fragment. Displays buttons for each
+	 * letter in the word.
+	 */
 	@Override
 	public void onStart() {
 		// TODO Auto-generated method stub
 		super.onStart();
 
-		
 		LinearLayout linearLayout = (LinearLayout) getActivity().findViewById(
 				R.id.word_fragment_layout);
 		linearLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -85,10 +98,90 @@ public class WordFragment extends Fragment {
 
 	}
 
-	public boolean updateWordView(int id) {
+	/**
+	 * invoked when a letter is clicked in the letters fragment Checks if the
+	 * letter clicked is present in the word. If yes the letter is shown at its
+	 * position in the word.
+	 * 
+	 * @param id
+	 *            - ID for the button that was clicked
+	 * @return 0 if the view was updated
+	 * 		   1 if the view was not updated
+	 * 		   2 if 10 chances are consumed and game ends
+	 */
+	public int updateWordView(int id) {
+		final int WORD_UPDATED=0;
+		final int WORD_NOT_UPDATED=1;
+		final int GAME_END=2;
+		
+		String letter = getLetter(id);
+		
+		if (getWord().contains(letter)) {
+			LinearLayout linearLayout = (LinearLayout) getActivity()
+					.findViewById(R.id.word_fragment_layout);
+			Log.d(TAG, "child count is " + linearLayout.getChildCount());
+	
+			for (int counter = 0; counter < linearLayout.getChildCount(); counter++) {
+				int position = getWord().indexOf(letter, counter);
+				if (position != -1) {
+					Button b = (Button) linearLayout.getChildAt(position);
+					if (b == null) {
+						Log.d(TAG, "button null position " + position);
+					} else {
+						b.setText(letter);
+						Log.d(TAG, "button text set at  " + position);
+					}
+					counter = position;
+				}
+			}
+		} else {
+			// TODO temporary dialog - for debugging, to be removed
+			Dialog letterAbsent = new Dialog(getActivity());
+			letterAbsent.setTitle("Letter not found");
+			TextView tv = new TextView(getActivity());
+			tv.setText(letter + " absent");
+			letterAbsent.setContentView(tv);
+			letterAbsent.show();
+
+			PlayActivity.setState(PlayActivity.getState()+1);
+			if(PlayActivity.getState()==10){
+				//TODO end game/Show score
+				return GAME_END;
+				
+			}
+			return WORD_NOT_UPDATED;
+
+		}
+		
+		return WORD_UPDATED;
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
 		// TODO Auto-generated method stub
-		String letter = "XXX"; // initialized to a value so that by default no
-								// letter is shown
+		super.onSaveInstanceState(outState);
+
+	}
+
+	@Override
+	public void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		Log.d(TAG, "OnDestroy");
+	}
+
+	/**
+	 * Returns the String letter for an integer id
+	 * @param id
+	 * @return letter
+	 */
+	private String getLetter(int id) {
+		String letter = "XXX"; // initialized to a value so that by default no letter is shown
 		switch (id) {
 		case R.id.a:
 			letter = "A";
@@ -170,56 +263,7 @@ public class WordFragment extends Fragment {
 			break;
 
 		}
-		if (getWord().contains(letter)) {
-			LinearLayout linearLayout = (LinearLayout) getActivity()
-					.findViewById(R.id.word_fragment_layout);
-			Log.d("WordFragment",
-					"child count is " + linearLayout.getChildCount());
-			// int wordLength = getWord().length();
 
-			for (int counter = 0; counter < linearLayout.getChildCount(); counter++) {
-				int position = getWord().indexOf(letter, counter);
-				if (position != -1) {
-					Button b = (Button) linearLayout.getChildAt(position);
-					if (b == null) {
-						Log.d("WordFragment", "button null position "
-								+ position);
-					} else {
-						b.setText(letter);
-						Log.d("WordFragment", "button tesxt set at  "
-								+ position);
-					}
-					counter = position ;
-				} 
-			}
-		}else {
-			Dialog letterAbsent = new Dialog(getActivity());
-			letterAbsent.setTitle("Letter not found");
-			TextView tv = new TextView(getActivity());
-			tv.setText(letter + " absent");
-			letterAbsent.setContentView(tv);
-			letterAbsent.show();
-			return false;
-
-		}
-		/*
-		 * int counter = 0; while (counter < wordLength) { int position =
-		 * getWord().indexOf(letter, counter); counter = position; Button
-		 * b=(Button)linearLayout.getChildAt(position); if(b==null){
-		 * Log.d("WordFragment", "button null position "+position); }else{
-		 * b.setText(letter); } counter++; }
-		 */
-		return true;
+		return letter;
 	}
-
-	private void setWord(String word) {
-		this.word = word;
-
-	}
-
-	private String getWord() {
-		return this.word;
-	}
-	
-
 }
